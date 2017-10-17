@@ -2,6 +2,10 @@
 package lesson2.task1
 
 import lesson1.task1.discriminant
+import lesson1.task1.sqr
+import lesson4.task1.abs
+import java.lang.Math.abs
+import java.lang.Math.min
 
 /**
  * Пример
@@ -33,16 +37,17 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String =
-        when (age % 10) {1 -> "$age год"
-            in 2..4 -> "$age года"
-            in 5..9 -> "$age лет"
-            else -> {
-                "$age лет"
-            }
-        }
+fun ageDescription(age: Int): String{
+    return when{
+        age % 100 in 11..14 -> "$age лет"
+        age % 10 == 1 -> "$age год"
+        age % 10 in 2..4 -> "$age года"
+        else -> "$age лет"
+
+    }
 
 
+}
 
 /**
  * Простая
@@ -53,12 +58,22 @@ fun ageDescription(age: Int): String =
  */
 fun timeForHalfWay(t1: Double, v1: Double,
                    t2: Double, v2: Double,
-                   t3: Double, v3: Double): Double = ((t1 + t2 + t3) * (v1 + v2 + v3)) / 2
+                   t3: Double, v3: Double): Double{
+    val s1: Double = t1 * v1
+    val s2: Double = t2 * v2
+    val s3: Double = t3 * v3
+    val halfWay: Double = (s1 + s2 + s3) / 2.0
+    return if (s1 >= halfWay) halfWay / v1
+    else
+        if (s1 + s2 >= halfWay) t1 + (halfWay - s1) / v2
+        else t1 + t2 + (halfWay - s1 - s2) / v3
+}
+
 
 /**
  * Простая
  *
- * Нa шахматной доске стоят черный король и две белые ладьи (ладья бьет по горизонтали и вертикали).
+ * Нa шахматной доске стоят черный кооль и две белые ладьи (ладья бьет по горизонтали и вертикали).
  * Определить, не находится ли король под боем, а если есть угроза, то от кого именно.
  * Вернуть 0, если угрозы нет, 1, если угроза только от первой ладьи, 2, если только от второй ладьи,
  * и 3, если угроза от обеих ладей.
@@ -66,7 +81,12 @@ fun timeForHalfWay(t1: Double, v1: Double,
  */
 fun whichRookThreatens(kingX: Int, kingY: Int,
                        rookX1: Int, rookY1: Int,
-                       rookX2: Int, rookY2: Int): Int = TODO()
+                       rookX2: Int, rookY2: Int): Int {
+    var d = 0
+    if ((rookX1 == kingX) || (rookY1 == kingY)) d = 1
+    if ((rookX2 == kingX) || (rookY2 == kingY)) d += 2
+    return d
+}
 
 /**
  * Простая
@@ -80,8 +100,12 @@ fun whichRookThreatens(kingX: Int, kingY: Int,
  */
 fun rookOrBishopThreatens(kingX: Int, kingY: Int,
                           rookX: Int, rookY: Int,
-                          bishopX: Int, bishopY: Int): Int = TODO()
-
+                          bishopX: Int, bishopY: Int): Int {
+    var d = 0
+    if ((rookX == kingX) || (rookY == kingY)) d = 1
+    if (abs(bishopX - kingX) == abs(bishopY - kingY)) d += 2
+    return d
+}
 /**
  * Простая
  *
@@ -90,7 +114,39 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int{
+    val min1: Double
+    val min2: Double
+    val max: Double
+    if (a > b)
+        if (a > c) {
+            max = a
+            min1 = b
+            min2 = c
+        }
+        else {
+            max = c
+            min1 = b
+            min2 = a
+        }
+
+    else
+        if (b > c) {
+            max = b
+            min1 = a
+            min2 = c
+        }
+        else {
+            max = c
+            min1 = b
+            min2 = a
+        }
+
+    if (min1 + min2 < max) return -1
+    if (sqr(min1) + sqr(min2) > sqr(max)) return 0
+    if (sqr(min1) + sqr(min2) == sqr(max)) return 1
+    return 2
+}
 
 /**
  * Средняя
@@ -100,4 +156,8 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Найти длину пересечения отрезков AB и CD.
  * Если пересечения нет, вернуть -1.
  */
-fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int{
+    if (((a in c..d) && (b in c..d)) || ((c in a..b) && (d in a..b))) return min(b - a, d - c)
+    if ((a in c..d) || (b in c..d)) return min(b - c, d - a)
+    return -1
+}
