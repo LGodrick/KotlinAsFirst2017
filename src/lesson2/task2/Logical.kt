@@ -1,4 +1,5 @@
 @file:Suppress("UNUSED_PARAMETER")
+
 package lesson2.task2
 
 import lesson1.task1.sqr
@@ -30,7 +31,7 @@ fun isNumberHappy(number: Int): Boolean =
  * Считать, что ферзи не могут загораживать друг друга.
  */
 fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean =
-        x1 == x2 || y1 == y2 || abs(x2 - x1) ==  abs(y2 - y1)
+        x1 == x2 || y1 == y2 || abs(x2 - x1) == abs(y2 - y1)
 
 /**
  * Средняя
