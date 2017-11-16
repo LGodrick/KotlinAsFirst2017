@@ -195,7 +195,20 @@ fun accumulate(list: MutableList<Double>): MutableList<Double>  {
  * Результат разложения вернуть в виде списка множителей, например 75 -> (3, 5, 5).
  * Множители в списке должны располагаться по возрастанию.
  */
-fun factorize(n: Int): List<Int> = TODO()
+fun factorize(n: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    var number = n
+    var divider = 2
+    while (number > 1) {
+        while (number % divider != 0) {
+            divider += 1
+        }
+        number /= divider
+        result += divider
+    }
+    return result
+}
+
 
 /**
  * Сложная
@@ -203,7 +216,23 @@ fun factorize(n: Int): List<Int> = TODO()
  * Разложить заданное натуральное число n > 1 на простые множители.
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  */
-fun factorizeToString(n: Int): String = TODO()
+fun factorizeToString(n: Int): String {
+    val result = mutableListOf<Int>()
+    var number = n
+    var div = 2
+    while (number > 1) {
+        while (number % div != 0) {
+            div += 1
+        }
+        number /= div
+        result += div
+    }
+
+    return result.joinToString(
+            separator = "*"
+    )
+}
+
 
 /**
  * Средняя
@@ -212,7 +241,18 @@ fun factorizeToString(n: Int): String = TODO()
  * Результат перевода вернуть в виде списка цифр в base-ичной системе от старшей к младшей,
  * например: n = 100, base = 4 -> (1, 2, 1, 0) или n = 250, base = 14 -> (1, 3, 12)
  */
-fun convert(n: Int, base: Int): List<Int> = TODO()
+fun convert(n: Int, base: Int): List<Int> {
+    val result = mutableListOf<Int>()
+    val number = base
+    var number2 = n
+    while (number2 >= 0) {
+        result += number2 % number
+        number2 /= number
+        if (number2 == 0) break
+    }
+    return result.reversed()
+}
+
 
 /**
  * Сложная
@@ -252,7 +292,14 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val units = arrayOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
+    val tens = arrayOf("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
+    val hundreds = arrayOf("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
+    val thousands = arrayOf("", "M", "MM", "MMM")
+    val roman = thousands[n / 1000] + hundreds[n % 1000 / 100] + tens[n % 100 / 10] + units[n % 10]
+    return roman
+}
 
 /**
  * Очень сложная

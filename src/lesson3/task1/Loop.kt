@@ -131,12 +131,7 @@ fun minDivisor(n: Int): Int {
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
 fun maxDivisor(n: Int): Int {
-    var maxDiv = 0
-    for (div in 1 until n) {
-        if (n % div == 0) {
-            maxDiv = div
-        }
-    }
+    val maxDiv = (1 until n).lastOrNull { n % it == 0 } ?: 0
     return maxDiv
 }
 
@@ -162,11 +157,8 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    for (k in min(m, n)..max(m, n)) {
-        if (m > k * k)
-            return false
-    }
-    return true
+    val k = Math.floor(Math.sqrt(n.toDouble()))
+    return k * k >= m
 }
 
 
@@ -319,12 +311,12 @@ fun fibSequenceDigit(n: Int): Int {
     while (length < n) {
         fib = fib(count)
         length += digitNumber(fib)
-        count += 1
+        count+=1
     }
     if (length > n) {
         while (length != n) {
             fib /= 10
-            length -=1
+            length-=1
         }
     }
     return fib % 10
