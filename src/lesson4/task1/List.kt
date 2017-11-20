@@ -308,4 +308,38 @@ fun roman(n: Int): String {
  * Например, 375 = "триста семьдесят пять",
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
-fun russian(n: Int): String = TODO()
+fun russian(n: Int): String {
+var count = 0
+    var number = n
+    while (number != 0) {
+        number /= 10
+        count +=1
+    }
+    var russian = " "
+    val units = arrayOf("", "один ", "два ", "три ", "четыре ", "пять ", "шесть ", "семь ", "восемь ", "девять ")
+    val tens = arrayOf("", "десять ", "двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
+    val hundreds = arrayOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
+    val thousands = arrayOf("", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
+    val k = if (n % 10000 / 1000 == 2) "две "
+    else {
+        if (n % 10000 / 1000 == 1) "одна "
+        else units[n % 10000 / 1000]
+    }
+    val l = if (n % 100000 / 10000 == 1) thousands[n % 10000 / 1000]
+    else tens[n % 100000 / 10000] + k
+    val j = if (n % 100 / 10 == 1 && n % 10  != 0) thousands[n % 10]
+    else tens[n % 100 / 10] + units[n % 10]
+    val m = if (n % 10000 / 1000 == 1 && n % 100000 / 10000 != 1) "тысяча "
+    else {
+        if (n % 10000 / 1000 > 4 || n % 10000 / 1000 == 0 || n % 100000 / 10000 == 1) "тысяч "
+        else "тысячи "
+    }
+if (n == 0) russian = "ноль"
+if (count == 6) russian = hundreds[n / 100000] + l + m + hundreds[n % 1000 / 100] + j
+if (count == 5) russian = l + m + hundreds[n % 1000 / 100] + j
+if (count == 4) russian = k + m + hundreds[n % 1000 / 100] + j
+if (count == 3) russian = hundreds[n / 100] + j
+if (count == 2) russian = j
+if (count == 1) russian = units[n % 10]
+return russian.trim()
+}
