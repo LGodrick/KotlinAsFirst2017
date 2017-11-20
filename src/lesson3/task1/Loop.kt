@@ -82,15 +82,16 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var fib3 = 0
     var fib1 = 1
     var fib2 = 1
-    for (i in 2..n) {
-        fib3 = fib1 + fib2
-        fib2 = fib1
+    var fib3 = 0
+    for (i in 3..n) {
+        fib3 = fib2
+        fib2 += fib1
         fib1 = fib3
     }
-    return fib3
+    return fib2
+
 }
 
 /**
@@ -100,16 +101,16 @@ fun fib(n: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var grtCmnDiv = 1
-    var div = 1
-    while (div <= m && div <= n) {
-        if (m % div == 0 && n % div == 0)
-            grtCmnDiv = div
-        div += 1
+    val lcm = m * n
+    var k = m
+    var l = n
+    while ((l != 0) && (k != 0)) {
+        if (l > k) l %= k
+        else k %= l
     }
-    val k = n * m / grtCmnDiv
-    return k
+    return lcm / (l + k)
 }
+
 
 /**
  * Простая
@@ -117,14 +118,15 @@ fun lcm(m: Int, n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    for (minDivisor in 2..n) {
-        if (n % minDivisor == 0) {
-            return minDivisor
+    var min = 0
+    for (k in 2..n) {
+        if ((n % k) == 0) {
+            min = k
+            break
         }
     }
-    return n
+    return min
 }
-
 /**
  * Простая
  *
@@ -157,11 +159,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val k = Math.floor(Math.sqrt(n.toDouble()))
-    return k * k >= m
+    var k: Int = Math.sqrt(m.toDouble()).toInt()
+    if (k * k < m) k +=1
+    return k <= Math.sqrt(n.toDouble())
 }
-
-
 /**
  * Средняя
  *
@@ -170,19 +171,21 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double{
-    var k = 0
-    var sin = x
-    var number: Double = x
-    while (Math.abs(number) > eps) {
-        k += 1
-        number = Math.pow(x, k.toDouble() * 2 + 1) / factorial(k * 2 + 1)
-        if (k % 2 == 1) {
-            sin -= number
+    val number = x % (2 * Math.PI )
+    var sum = number
+    var result  = number
+    var count = 0
+    while (Math.abs(sum) >= eps) {
+        count+=1
+        sum = Math.pow(number,
+                count.toDouble() * 2 + 1) / factorial(count * 2 + 1)
+        if (count % 2 == 0) {
+            result += sum
         } else {
-            sin += number
+            result -= sum
         }
     }
-    return sin
+    return result
 }
 
 /**
@@ -193,19 +196,21 @@ fun sin(x: Double, eps: Double): Double{
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double{
-    var k = 0
+    val number = x % (2 * Math.PI )
+    var sum = number
     var cos = 1.0
-    var number = x
-    while (Math.abs(number) > eps) {
-    k += 1
-    number = Math.pow(x, k.toDouble() * 2) / factorial(k * 2)
-    if (k % 2 == 1) {
-        cos -= number
-    } else cos += number
+    var count = 0
+    while (Math.abs(sum) >= eps) {
+        count+=1
+        sum = Math.pow(number, count.toDouble() * 2) / factorial(count * 2)
+        if (count % 2 == 1) {
+            cos -= sum
+        } else {
+            cos += sum
+        }
+    }
+    return cos
 }
-return cos
-}
-
 /**
  * Средняя
  *
@@ -232,25 +237,15 @@ fun revert(n: Int): Int {
  * 15751 -- палиндром, 3653 -- нет.
  */
 fun isPalindrome(n: Int): Boolean {
-    var t = 10
-    var c = n
-    var j = 1
-    var k = 0
-    while (c > 0) {
-        c /= 10
-        k += 1
-        j *= 10
-    }
-    for (i in 1..k / 2) {
-        if (n / t != n / 1) {
+    var count = digitNumber(n) - 1
+    val s = n.toString()
+    for (i in 0..count)
+        when {
+        s[i] != s[count] ->
             return false
-        } else {
-            t *= 10
-            j / 10
-        }
+        else -> count -= 1
     }
     return true
-
 }
 
 /**
