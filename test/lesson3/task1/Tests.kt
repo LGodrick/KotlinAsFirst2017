@@ -110,6 +110,7 @@ class Tests {
         assertEquals(Int.MAX_VALUE, minDivisor(Int.MAX_VALUE))
     }
 
+
     @Test
     @Tag("Easy")
     fun maxDivisor() {

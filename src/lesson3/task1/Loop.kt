@@ -4,6 +4,8 @@ package lesson3.task1
 
 import java.lang.Integer.max
 import java.lang.Integer.min
+import java.lang.Math.floor
+import java.lang.Math.sqrt
 import javax.swing.text.html.HTML.Attribute.N
 
 /**
@@ -65,14 +67,14 @@ fun digitCountInNumber(n: Int, m: Int): Int = when {
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
 fun digitNumber(n: Int): Int {
-    var N = n
-    var num = 0
+    var num = n
+    var result = 0
     do {
-        num += 1
-        N /= 10
+        result += 1
+        num /= 10
 
-    } while (N != 0)
-    return num
+    } while (num != 0)
+    return result
 }
 
 /**
@@ -117,6 +119,7 @@ fun lcm(m: Int, n: Int): Int {
  *
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
+
 fun minDivisor(n: Int): Int {
     var min = 0
     for (k in 2..n) {
@@ -127,15 +130,13 @@ fun minDivisor(n: Int): Int {
     }
     return min
 }
+
 /**
  * Простая
  *
  * Для заданного числа n > 1 найти максимальный делитель, меньший n
  */
-fun maxDivisor(n: Int): Int {
-    val maxDiv = (1 until n).lastOrNull { n % it == 0 } ?: 0
-    return maxDiv
-}
+fun maxDivisor(n: Int): Int = n / minDivisor(n)
 
 /**
  * Простая
@@ -144,13 +145,19 @@ fun maxDivisor(n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    for (k in 2..min(m, n)) {
-        if (m % k == 0 && n % k == 0) return false
+fun gcd(a: Int, b: Int): Int {
+    var newA = a
+    var newB = b
+    while (max(newA, newB) % min(newA, newB) != 0) {
+        when {
+            newA > newB -> newA %= newB
+            else -> newB %= newA
+        }
     }
-    return true
+    return min(newA, newB)
 }
 
+fun isCoPrime(m: Int, n: Int): Boolean = gcd(m,n) == 1
 /**
  * Простая
  *
@@ -159,10 +166,10 @@ fun isCoPrime(m: Int, n: Int): Boolean {
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    var k: Int = Math.sqrt(m.toDouble()).toInt()
-    if (k * k < m) k +=1
-    return k <= Math.sqrt(n.toDouble())
+    val k = Math.floor(Math.sqrt(n.toDouble()))
+    return k * k >= m
 }
+
 /**
  * Средняя
  *

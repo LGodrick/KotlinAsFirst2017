@@ -144,16 +144,12 @@ fun center(list: MutableList<Double>): MutableList<Double> {
  * C = a1b1 + a2b2 + ... + aNbN. Произведение пустых векторов считать равным 0.0.
  */
 fun times(a: List<Double>, b: List<Double>): Double{
-    var min = 0
-    min = if (a.size < b.size) {
-        a.size - 1
-    } else {
-        b.size - 1
+    var k = 0.0
+    for (i in 0.until(a.size)) {
+        k += a[i] * b[i]
     }
-    val sum = (0..min).sumByDouble { a[it] * b[it] }
-    return sum
+    return k
 }
-
 /**
  * Средняя
  *
@@ -247,10 +243,9 @@ fun convert(n: Int, base: Int): List<Int> {
     val result = mutableListOf<Int>()
     val number = base
     var number2 = n
-    while (number2 >= 0) {
+    while (number2 > 0) {
         result += number2 % number
         number2 /= number
-        if (number2 == 0) break
     }
     return result.reversed()
 }
@@ -295,14 +290,18 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
 fun roman(n: Int): String {
-    val units = arrayOf("", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX")
-    val tens = arrayOf("", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC")
-    val hundreds = arrayOf("", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM")
-    val thousands = arrayOf("", "M", "MM", "MMM")
-    val roman = thousands[n / 1000] + hundreds[n % 1000 / 100] + tens[n % 100 / 10] + units[n % 10]
-    return roman
+    val arabicSym = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val romanSym = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var str = ""
+    var k = n
+    for (i in 0 until arabicSym.size) {
+        while (k >= arabicSym[i]) {
+            str += romanSym[i]
+            k -= arabicSym[i]
+        }
+    }
+    return str
 }
-
 /**
  * Очень сложная
  *
@@ -311,7 +310,7 @@ fun roman(n: Int): String {
  * 23964 = "двадцать три тысячи девятьсот шестьдесят четыре"
  */
 fun russian(n: Int): String {
-var count = 0
+    var count = 0
     var number = n
     while (number != 0) {
         number /= 10
@@ -322,24 +321,24 @@ var count = 0
     val tens = arrayOf("", "десять ", "двадцать ", "тридцать ", "сорок ", "пятьдесят ", "шестьдесят ", "семьдесят ", "восемьдесят ", "девяносто ")
     val hundreds = arrayOf("", "сто ", "двести ", "триста ", "четыреста ", "пятьсот ", "шестьсот ", "семьсот ", "восемьсот ", "девятьсот ")
     val thousands = arrayOf("", "одиннадцать ", "двенадцать ", "тринадцать ", "четырнадцать ", "пятнадцать ", "шестнадцать ", "семнадцать ", "восемнадцать ", "девятнадцать ")
-    val k = if (n % 10000 / 1000 == 2) "две "
+    val extraUnits = if (n % 10000 / 1000 == 2) "две "
     else {
         if (n % 10000 / 1000 == 1) "одна "
         else units[n % 10000 / 1000]
     }
     val l = if (n % 100000 / 10000 == 1) thousands[n % 10000 / 1000]
-    else tens[n % 100000 / 10000] + k
+    else tens[n % 100000 / 10000] + extraUnits
     val j = if (n % 100 / 10 == 1 && n % 10  != 0) thousands[n % 10]
     else tens[n % 100 / 10] + units[n % 10]
-    val m = if (n % 10000 / 1000 == 1 && n % 100000 / 10000 != 1) "тысяча "
+    val extraThousands = if (n % 10000 / 1000 == 1 && n % 100000 / 10000 != 1) "тысяча "
     else {
         if (n % 10000 / 1000 > 4 || n % 10000 / 1000 == 0 || n % 100000 / 10000 == 1) "тысяч "
         else "тысячи "
     }
 if (n == 0) russian = "ноль"
-if (count == 6) russian = hundreds[n / 100000] + l + m + hundreds[n % 1000 / 100] + j
-if (count == 5) russian = l + m + hundreds[n % 1000 / 100] + j
-if (count == 4) russian = k + m + hundreds[n % 1000 / 100] + j
+if (count == 6) russian = hundreds[n / 100000] + l + extraThousands + hundreds[n % 1000 / 100] + j
+if (count == 5) russian = l + extraThousands + hundreds[n % 1000 / 100] + j
+if (count == 4) russian = extraUnits + extraThousands + hundreds[n % 1000 / 100] + j
 if (count == 3) russian = hundreds[n / 100] + j
 if (count == 2) russian = j
 if (count == 1) russian = units[n % 10]

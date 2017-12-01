@@ -13,6 +13,8 @@ class Tests {
         assertEquals(9.0, sqr(-3.0), 1e-5)
     }
 
+    private fun assertEquals(d: Double, sqr: Double, d1: Double) {}
+
     @Test
     @Tag("Example")
     fun discriminant() {
@@ -96,3 +98,7 @@ class Tests {
         assertEquals(201, numberRevert(102))
     }
 }
+
+annotation class Tag(val value: String)
+
+annotation class Test
