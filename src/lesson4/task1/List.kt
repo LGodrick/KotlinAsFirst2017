@@ -2,6 +2,8 @@
 package lesson4.task1
 
 import lesson1.task1.discriminant
+import lesson3.task1.minDivisor
+import java.lang.Math.pow
 
 /**
  * Пример
@@ -178,14 +180,10 @@ fun polynom(p: List<Double>, x: Double): Double{
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Double>): MutableList<Double>  {
-    var sum = 0.0
-    for (i in 0 until list.size) {
-        sum += list[i]
-        list[i] = sum
-    }
+    for (i in 1 until list.size)
+        list[i] += list[i - 1]
     return list
 }
-
 /**
  * Средняя
  *
@@ -194,18 +192,16 @@ fun accumulate(list: MutableList<Double>): MutableList<Double>  {
  * Множители в списке должны располагаться по возрастанию.
  */
 fun factorize(n: Int): List<Int> {
-    val result = mutableListOf<Int>()
-    var number = n
-    var divider = 2
-    while (number > 1) {
-        while (number % divider != 0) {
-            divider += 1
-        }
-        number /= divider
-        result += divider
+    val divisors = mutableListOf<Int>()
+    var n1 = n
+    while (n1 != 1) {
+        val div = minDivisor(n1)
+        divisors.add(div)
+        n1 /= div
     }
-    return result
+    return divisors
 }
+
 
 
 /**
@@ -259,8 +255,21 @@ fun convert(n: Int, base: Int): List<Int> {
  * строчными буквами: 10 -> a, 11 -> b, 12 -> c и так далее.
  * Например: n = 100, base = 4 -> 1210, n = 250, base = 14 -> 13c
  */
-fun convertToString(n: Int, base: Int): String = TODO()
-
+fun convertToString(n: Int, base: Int): String{
+    val list = convert(n, base)
+    val res = mutableListOf<Char>()
+    if (n == 0) {
+        return "0"
+    } else {
+        for (e in list) {
+            when {
+                e <= 9 -> res.add('0' + e)
+                else -> res.add('a' + e - 10)
+            }
+        }
+        return res.joinToString("")
+    }
+}
 /**
  * Средняя
  *
@@ -268,7 +277,15 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * из системы счисления с основанием base в десятичную.
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
-fun decimal(digits: List<Int>, base: Int): Int = TODO()
+fun decimal(digits: List<Int>, base: Int): Int {
+    var num = 0.0
+    var degree = pow(base.toDouble(), digits.size - 1.0)
+    for (i in 0 until digits.size) {
+        num += digits[i] * degree
+        degree /= base
+    }
+    return num.toInt()
+}
 
 /**
  * Сложная

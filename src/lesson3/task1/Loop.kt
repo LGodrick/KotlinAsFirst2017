@@ -4,9 +4,8 @@ package lesson3.task1
 
 import java.lang.Integer.max
 import java.lang.Integer.min
-import java.lang.Math.floor
-import java.lang.Math.sqrt
-import javax.swing.text.html.HTML.Attribute.N
+import java.lang.Math.*
+import lesson1.task1.sqr
 
 /**
  * Пример
@@ -67,16 +66,15 @@ fun digitCountInNumber(n: Int, m: Int): Int = when {
  * Например, число 1 содержит 1 цифру, 456 -- 3 цифры, 65536 -- 5 цифр.
  */
 fun digitNumber(n: Int): Int {
-    var num = n
-    var result = 0
-    do {
-        result += 1
-        num /= 10
-
-    } while (num != 0)
-    return result
+    var count = 0
+    var k = n
+    while (k != 0) {
+        count +=1
+        k /= 10
+    }
+    return if (count == 0) 1
+    else count
 }
-
 /**
  * Простая
  *
@@ -178,7 +176,7 @@ fun squareBetweenExists(m: Int, n: Int): Boolean {
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun sin(x: Double, eps: Double): Double{
-    val number = x % (2 * Math.PI )
+    val number = x % (2 * PI )
     var sum = number
     var result  = number
     var count = 0
@@ -203,7 +201,7 @@ fun sin(x: Double, eps: Double): Double{
  * Нужную точность считать достигнутой, если очередной член ряда меньше eps по модулю
  */
 fun cos(x: Double, eps: Double): Double{
-    val number = x % (2 * Math.PI )
+    val number = x % (2 * PI )
     var sum = number
     var cos = 1.0
     var count = 0

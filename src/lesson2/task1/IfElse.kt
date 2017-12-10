@@ -115,38 +115,19 @@ fun rookOrBishopThreatens(kingX: Int, kingY: Int,
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int{
-    val min1: Double
-    val min2: Double
-    val max: Double
-    if (a > b)
-        if (a > c) {
-            max = a
-            min1 = b
-            min2 = c
-        }
-        else {
-            max = c
-            min1 = b
-            min2 = a
-        }
-
-    else
-        if (b > c) {
-            max = b
-            min1 = a
-            min2 = c
-        }
-        else {
-            max = c
-            min1 = b
-            min2 = a
-        }
-
-    if (min1 + min2 < max) return -1
-    if (sqr(min1) + sqr(min2) > sqr(max)) return 0
-    if (sqr(min1) + sqr(min2) == sqr(max)) return 1
-    return 2
+    fun sqr(x: Double) = x * x
+    val max = maxOf(maxOf(a, b), c)
+    val min = minOf(minOf(a, b), c)
+    val mid = a + b + c - max - min
+    return when {
+        max > min + mid -> -1
+        sqr(max) > sqr(mid) + sqr(min) -> 2
+        sqr(max) == sqr(mid) + sqr(min) -> 1
+        sqr(max) < sqr(mid) + sqr(min) -> 0
+        else -> -1
+    }
 }
+
 
 /**
  * Средняя
