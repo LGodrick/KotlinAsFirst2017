@@ -67,13 +67,12 @@ fun digitCountInNumber(n: Int, m: Int): Int = when {
  */
 fun digitNumber(n: Int): Int {
     var count = 0
-    var k = n
-    while (k != 0) {
+    var num = abs(n)
+    do {
+        num /= 10
         count +=1
-        k /= 10
-    }
-    return if (count == 0) 1
-    else count
+    } while (num > 0)
+    return count
 }
 /**
  * Простая
@@ -164,7 +163,7 @@ fun isCoPrime(m: Int, n: Int): Boolean = gcd(m,n) == 1
  * Например, для интервала 21..28 21 <= 5*5 <= 28, а для интервала 51..61 квадрата не существует.
  */
 fun squareBetweenExists(m: Int, n: Int): Boolean {
-    val k = Math.floor(Math.sqrt(n.toDouble()))
+    val k = floor(sqrt(n.toDouble()))
     return k * k >= m
 }
 
@@ -180,9 +179,9 @@ fun sin(x: Double, eps: Double): Double{
     var sum = number
     var result  = number
     var count = 0
-    while (Math.abs(sum) >= eps) {
+    while (abs(sum) >= eps) {
         count+=1
-        sum = Math.pow(number,
+        sum = pow(number,
                 count.toDouble() * 2 + 1) / factorial(count * 2 + 1)
         if (count % 2 == 0) {
             result += sum
@@ -205,9 +204,9 @@ fun cos(x: Double, eps: Double): Double{
     var sum = number
     var cos = 1.0
     var count = 0
-    while (Math.abs(sum) >= eps) {
+    while (abs(sum) >= eps) {
         count+=1
-        sum = Math.pow(number, count.toDouble() * 2) / factorial(count * 2)
+        sum = pow(number, count.toDouble() * 2) / factorial(count * 2)
         if (count % 2 == 1) {
             cos -= sum
         } else {

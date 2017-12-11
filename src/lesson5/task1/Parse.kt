@@ -79,36 +79,23 @@ fun dateStrToDigit(str: String): String = TODO()
  * При неверном формате входной строки вернуть пустую строку
  */
 fun dateDigitToStr(digital: String): String {
+    val months = listOf("января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+            "сентября", "октября", "ноября", "декабря")
     val parts = digital.split(".")
-    var result = ""
-    if (parts.size == 3) {
-        try {
-            val day = parts[0].toInt()
-            val month = parts[1]
-            result = day.toString()
-            result += when {
-                month == "01" && day in 1..31 -> " января "
-                month == "02" && parts[2].toInt() % 4 == 0 && day == 29 -> " февраля "
-                month == "02" && day in 1..28 -> " февраля "
-                month == "03" && day in 1..31 -> " марта "
-                month == "04" && day in 1..30 -> " апреля "
-                month == "05" && day in 1..31 -> " мая "
-                month == "06" && day in 1..30 -> " июня "
-                month == "07" && day in 1..31 -> " июля "
-                month == "08" && day in 1..31 -> " августа "
-                month == "09" && day in 1..30 -> " сентября "
-                month == "10" && day in 1..31 -> " октября "
-                month == "11" && day in 1..30 -> " ноября "
-                month == "12" && day in 1..31 -> " декабря "
-                else -> return ""
-            }
-            result += parts[2].toInt().toString()
-        } catch (e: NumberFormatException) {
-            return ""
-        }
-        return result
-    } else
+    if (parts.size != 3)
         return ""
+    try {
+        val days = parts[0].toInt()
+        val month = parts[1].toInt()
+        val year = parts[2].toInt()
+        if ((days in 1..31) && (month in 1..12)) {
+            val month = months[parts[1].toInt() - 1]
+            return String.format("%d %s %d", days, month, year)
+        } else
+            return ""
+    } catch (e: NumberFormatException) {
+        return ""
+    }
 }
 
 
@@ -183,28 +170,12 @@ fun bestLongJump(jumps: String): Int {
  * При нарушении формата входной строки вернуть -1.
  */
 fun bestHighJump(jumps: String): Int {
-    var maxHigh = 0
-    var count = 0
+    val results = mutableListOf<Int>()
     val parts = jumps.split(" ")
-    if (parts.size <= 1){
-        return -1
-    } else {
-        for (i in 0..parts.size - 1 step 2) {
-            val jumpRegular = Regex("""\d+[-+%]+""")
-            if (!jumpRegular.matches(parts[i] + parts[i + 1]))
-                return -1
-            if ('+' in parts[i + 1] && parts[i].toInt() >= maxHigh) {
-                maxHigh = parts[i].toInt()
-                count+=1
-            }
-        }
-    }
-    if (count > 0) {
-        return maxHigh
-    } else {
-        return -1
-    }
-
+    for (i in 1 until parts.size)
+        if (parts[i].any { it == '+' })
+            results.add(parts[i - 1].toInt())
+    return results.max() ?: -1
 }
 
 /**
