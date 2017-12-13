@@ -118,16 +118,10 @@ fun lcm(m: Int, n: Int): Int {
  */
 
 fun minDivisor(n: Int): Int {
-    var min = 0
-    for (k in 2..n) {
-        if ((n % k) == 0) {
-            min = k
-            break
-        }
-    }
-    return min
+    if (isPrime(n))
+        return n
+    return (2..round(sqrt(n.toDouble())).toInt()).firstOrNull { n % it == 0 } ?: n
 }
-
 /**
  * Простая
  *
