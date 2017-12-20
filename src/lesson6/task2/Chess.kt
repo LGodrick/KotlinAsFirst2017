@@ -1,6 +1,9 @@
 @file:Suppress("UNUSED_PARAMETER")
 package lesson6.task2
 
+import java.lang.Math.abs
+import java.lang.Math.max
+
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
  * Поэтому, обе координаты клетки (горизонталь row, вертикаль column) могут находиться в пределах от 1 до 8.
@@ -122,9 +125,9 @@ fun bishopMoveNumber(start: Square, end: Square): Int {
     if (start.inside() && end.inside()) {
         return when {
             start == end -> 0
-            Math.abs(end.column - start.column) == Math.abs(end.row - start.row) -> 1
-            (Math.abs(end.column - start.column) + Math.abs(end.row - start.row)) % 2 == 0 -> 2
-            (Math.abs(end.column - start.column) + Math.abs(end.row - start.row)) % 2 == 1 -> -1
+            abs(end.column - start.column) == abs(end.row - start.row) -> 1
+            (abs(end.column - start.column) + abs(end.row - start.row)) % 2 == 0 -> 2
+            (abs(end.column - start.column) + abs(end.row - start.row)) % 2 == 1 -> -1
             else -> throw IllegalArgumentException("IllegalArgumentException")
         }
     } else throw IllegalArgumentException("IllegalArgumentException")
@@ -186,8 +189,8 @@ fun kingMoveNumber(start: Square, end: Square): Int {
     if (!start.inside() || !end.inside()) {
         throw IllegalArgumentException("IllegalArgumentException")
     } else {
-        return Math.max(Math.abs(start.column - end.column),
-                Math.abs(start.row - end.row))
+        return max(abs(start.column - end.column),
+                abs(start.row - end.row))
     }
 }
 
