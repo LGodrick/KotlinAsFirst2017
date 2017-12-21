@@ -180,20 +180,17 @@ return result
  * Про нарушении формата входной строки бросить исключение IllegalArgumentException
  */
 fun plusMinus(expression: String): Int  {
-try {
-    val parts = expression.split(" ")
-    var sum = parts[0].toInt()
-    for (i in 2..parts.size step 2) {
-        when {
-            parts[i - 1] == "+" -> sum += parts[i].toInt()
-            parts[i - 1] == "-" -> sum -= parts[i].toInt()
-            else -> throw IllegalArgumentException()
+    try {
+        val parts = expression.split(" ")
+        var sum = parts[0].toInt()
+        for (i in 1 until parts.size - 1 step 2) {
+            if (parts[i] == "+") sum += parts[i + 1].toInt()
+            else sum -= parts[i + 1].toInt()
         }
+        return sum
+    } catch (e: NumberFormatException) {
+        throw IllegalArgumentException()
     }
-    return sum
-} catch (e: NumberFormatException) {
-    throw  IllegalArgumentException(e)
-}
 }
 
 /**
